@@ -6,10 +6,12 @@
 {% block page%}
 <div class="wrapper">
     <div class="form-box login">
-    <h2>Login</h2>
-    <button class="link-button" onclick="window.location.href='{{ url_for('login') }}'">Login</button>
+    <h2>Please Login with Your Spotify Account</h2>
+    <button class="btn" onclick="window.location.href='{{ url_for('login') }}'">Click Me!</button>
     </div>
 </div>
+{% endblock%}
 
-
+{% block footer%}
+ 
 {% endblock%}
