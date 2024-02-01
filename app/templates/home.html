@@ -2,9 +2,14 @@
 {% block navbar %}
 
 {% endblock%}
-{% block facade%}
+
+{% block page%}
 <div class="wrapper">
-    <h1>Login</h1>
+    <div class="form-box login">
+    <h2>Login</h2>
+    <button class="link-button" onclick="window.location.href='{{ url_for('login') }}'">Login</button>
+    </div>
 </div>
-<a href="{{ url_for('login') }}"><button>Login to Spotify</button></a>
+
+
 {% endblock%}

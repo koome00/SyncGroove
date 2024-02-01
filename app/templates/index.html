@@ -1,12 +1,28 @@
 {% extends "base.html" %}
+
 {% block navbar %}
       <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
 {% endblock%}
-{% block facade%}
+
+
+{% block page%}
 <h1>
-    Welcome Koome!!
+    Welcome {{ user }}!!
 </h1>
+
+<a href="{{ url_for('logout') }}"><button>Logout</button></a>
+{% endblock%}
+
+
+{% block js%}
+<script>
+    // Access the access token passed from Flask
+    
+
+    // Now you can use the access token in your JavaScript code
+    // For example, you can make requests to the Spotify API using this access token
+</script> 
 {% endblock%}
