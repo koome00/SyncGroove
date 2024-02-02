@@ -9,7 +9,7 @@ load_dotenv()
 
 c_id = os.getenv('CLIENT_ID')
 c_secret = os.getenv("CLIENT_SECRET")
-r_uri = 'http://localhost:5000/home'
+r_uri = 'http://192.168.0.14:5000/home/'
 
 def user_authorization():
     """

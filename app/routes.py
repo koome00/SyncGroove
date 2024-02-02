@@ -1,20 +1,22 @@
 from flask import Flask, request, redirect, render_template, session, url_for
 from auth import request_access_token, user_authorization
-import os
-import time
-import requests
-import base64
+import os, time, requests, base64
+from datetime import timedelta
+from dotenv import load_dotenv
 
-
+load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
+app.permanent_session_lifetime = timedelta(days=1)
 c_id = os.getenv('CLIENT_ID')
 c_secret = os.getenv("CLIENT_SECRET")
-TOKEN_INFO = 'token_info'
+
   
 @app.route("/", strict_slashes=False)
 def home():
-    
+    """
+    route handling the login page
+    """
     return render_template('home.html')
 
 
@@ -22,33 +24,80 @@ def home():
 def login():
     """
     redirects user to spotify to give authorization
+    code used to get access token is in the redirect uri paramaters
     """
     auth_url = user_authorization()
     return redirect(auth_url) 
 
-@app.route("/home", strict_slashes=False)
+
+@app.route("/home/", strict_slashes=False)
 def authorized():
     """
     if user gives permission, they will be redirected here
     the code parameter is extracted to get token information
+    The user is then redirected to the home page after their code is captured
+    and stored in their session
     """
     # if auth is granted, take code and use the request_access_token 
     # to be given access token info
     # ...not yet completed...
-    code = request.args.get('code')
-    session.clear()
-    token_info = request_access_token(code)
     
-    access_token = get_access_token(token_info)
-    return render_template('index.html', access_token=access_token)
+    code = request.args.get('code')
+    
+    response = request_access_token(code)
+    # session["token_info"] = response
+    # response = session['token_info']
+    if 'error' in response:
+        # noticed that when this page reloads, the response has an error
+        # in the body
+        # this condition is meant to refresh the page and get new access_tokens
+        # for when the user refreshes the page
+        return redirect(url_for('login'))
+    
+    # get user's token
+    token = response.get('access_token')
+    
+    # spotify uri to request current user info
+    url = "https://api.spotify.com/v1/me"
+    headers = {
+        'Authorization' : 'Bearer ' + token
+    }
+    user_response = requests.get(url, headers=headers)
+    
+    # parse user's info to get display_name
+    u_response = user_response.json()
+    user_name = u_response['display_name'] 
+    
+    # store access information in session
+    session[user_name] = response
+
+    # reirect user to their page    
+    return redirect(f'/{user_name}')
+
+
+@app.route("/<user>", strict_slashes=False)
+def user_page(user):
+    """
+    user's page
+    """
+   
+    
+    return render_template('index.html', user=user)
+
+
+@app.route("/logout")
+def logout():
+    user_name = request.args.get("user")
+    session.pop(user_name, None)
+    return redirect(url_for("home"))
+
 
 def get_access_token(token_info):
     """
     get token or refresh token if expired
     """
-    session[TOKEN_INFO] = token_info
-    token_info = session.get(TOKEN_INFO, None)
-    if not token_info:
+    
+    if "access_info" not in session:
         # if the token info is not found, redirect the user to the login route
         redirect(url_for('login'))
     
@@ -83,4 +132,4 @@ def get_access_token(token_info):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)

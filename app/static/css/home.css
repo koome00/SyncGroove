@@ -11,6 +11,19 @@ body {
     overflow: hidden;
 }
 
+header {
+    position: fixed;
+    top: 0;
+    display: flex;
+    left: 0;
+    width: 120%;
+    left: 0;
+    padding: 20px 20px;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 99;
+}
+
 .brand-text {
     font-family: "Pacifico", sans-serif;
     font-size: 2em;
