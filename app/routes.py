@@ -1,11 +1,14 @@
-from flask import Flask, request, redirect, render_template, session, url_for
-from auth import request_access_token, user_authorization
+from flask import Flask, request, redirect, jsonify, render_template, session, url_for
+from flask_cors import CORS
+import spotify
 import os, time, requests, base64
-from datetime import timedelta
+from datetime import timedelta, datetime, timezone
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
 app = Flask(__name__)
+CORS(app)
 app.secret_key = os.getenv('SECRET_KEY')
 app.permanent_session_lifetime = timedelta(days=1)
 c_id = os.getenv('CLIENT_ID')
@@ -26,7 +29,7 @@ def login():
     redirects user to spotify to give authorization
     code used to get access token is in the redirect uri paramaters
     """
-    auth_url = user_authorization()
+    auth_url = spotify.user_authorization()
     return redirect(auth_url) 
 
 
@@ -41,10 +44,12 @@ def authorized():
     # if auth is granted, take code and use the request_access_token 
     # to be given access token info
     # ...not yet completed...
-    
+    session.clear()
     code = request.args.get('code')
-    
-    response = request_access_token(code)
+    response, auth_header, refresh_token, expires_at = spotify.request_access_token(code)
+    session['auth_header'] = auth_header
+    session['refresh_token'] = refresh_token
+    session['expires_at'] = expires_at
     # session["token_info"] = response
     # response = session['token_info']
     if 'error' in response:
@@ -53,37 +58,23 @@ def authorized():
         # this condition is meant to refresh the page and get new access_tokens
         # for when the user refreshes the page
         return redirect(url_for('login'))
-    
-    # get user's token
-    token = response.get('access_token')
-    
-    # spotify uri to request current user info
-    url = "https://api.spotify.com/v1/me"
-    headers = {
-        'Authorization' : 'Bearer ' + token
-    }
-    user_response = requests.get(url, headers=headers)
-    
-    # parse user's info to get display_name
-    u_response = user_response.json()
-    user_name = u_response['display_name'] 
-    
-    # store access information in session
-    session[user_name] = response
-
-    # reirect user to their page    
-    return redirect(f'/{user_name}')
+        
+       
+    return redirect(url_for('profile'))
 
 
-@app.route("/<user>", strict_slashes=False)
-def user_page(user):
+@app.route("/profile", strict_slashes=False)
+def profile():
     """
-    user's page
+    user's profile page
     """
-   
-    
-    return render_template('index.html', user=user)
+    check_state()
+    name, followers, p_pic = spotify.current_user_profile(session['auth_header'])
 
+    return render_template('index.html', name=name, followers=followers, p_pic=p_pic)
+    
+
+    
 
 @app.route("/logout")
 def logout():
@@ -92,43 +83,13 @@ def logout():
     return redirect(url_for("home"))
 
 
-def get_access_token(token_info):
-    """
-    get token or refresh token if expired
-    """
-    
-    if "access_info" not in session:
-        # if the token info is not found, redirect the user to the login route
-        redirect(url_for('login'))
-    
-    # check if the token is expired and refresh it if necessary
-    now = int(time.time())
-
-    is_expired = token_info.get('expires_in') - now < 3600
-    
-
-    if is_expired:
-        url = 'https://accounts.spotify.com/api/token'
-        # encode client_id and secret_id in base64
-        auth = c_id + ":" + c_secret
-        auth_string = auth.encode('utf-8')
-        auth64 = str(base64.b64encode(auth_string), 'utf-8')
-
-        data = {"grant_type": "refresh_token",
-            "refresh_token": token_info['refresh_token']
-            }
-        
-        # header for the POST request
-        headers = {"Authorization": "Basic " + auth64,
-               "Content-type": "application/x-www-form-urlencoded"}
-        # make post request
-        response = requests.post(url, headers=headers, data=data)
-
-        token_info = response.json()
-        session[TOKEN_INFO] = token_info
-    
-    return token_info.get('access_token')
-
+def check_state():
+    state = spotify.check_expired(session['expires_at'])
+    if state is True:
+        auth_header, refresh_token, expires_at = spotify.get_refresh_token(session['refresh_token'])
+        session['auth_header'] = auth_header
+        session['refresh_token'] = refresh_token
+        session['expires_at'] = expires_at
 
 
 if __name__ == '__main__':
