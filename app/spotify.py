@@ -10,7 +10,7 @@ load_dotenv()
 
 c_id = os.getenv('CLIENT_ID')
 c_secret = os.getenv("CLIENT_SECRET")
-r_uri = 'http://192.168.0.14:5000/home/'
+r_uri = 'http://localhost:5000/home/'
 
 def user_authorization():
     """
@@ -82,7 +82,7 @@ def get_refresh_token(refresh_token):
     }
 
     headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'content-Type': 'application/x-www-form-urlencoded',
         'Authorization': "Basic " + auth64
     }
     
@@ -90,12 +90,11 @@ def get_refresh_token(refresh_token):
     post_refresh = requests.post(url, data=body, headers=headers)
     response_data = post_refresh.json()
     access_token = response_data["access_token"]
-    refresh_token = response_data["refresh_token"]
     expires_in = response_data["expires_in"]
     expires_at = int(time.time()) + expires_in
 
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
-    return auth_header, refresh_token, expires_at
+    return auth_header, expires_at
 
 def check_expired(expired_at):
     now = int(time.time())
