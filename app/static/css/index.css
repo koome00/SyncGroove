@@ -1,76 +1,73 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: Helvetica, sans-serif;
     width: 100%; /* Full width */
-    height: 100vh; /* Full height */
+    height: 100vh;
     margin: 0; /* Remove default margin */
     padding: 0; /* Add padding to body */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    box-sizing: border-box; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
 }
 
-
-
-div .header {
-    position: fixed;
+.container {
+    display: flex;
+    position: relative;
+    justify-content: flex-start;
     top: 0;
     left: 0;
     width: 100%;
+    height: 70px;
+    align-items: center;
+    margin-left: 0px;
+    border-bottom: 3px solid green;
 }
 
-div .container {
+.container .brand-text{
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     padding: 10px 10px;
-    margin-left: auto;
-}
-
-.container .brand-text {
-    margin-right: auto; /* Push the h2 to the far left */
-    padding: 20px 20px;
-}
-
-
-@media (max-width: 768px) {
-    .container {
-        padding: 10px; /* Adjust padding for smaller screens */
-    }
+    margin-left: 0px;
+    margin-bottom: 0;
+    height: 50px;
+    font-family: Helvetica, sans-serif;
 }
 
 .container-column {
-    width: 100%;
     display: flex;
-    position: relative;
+    flex-grow: 1;
+    justify-content: space-between;
+    height: 804px;
 }
 
-.container-column .sidebar{
-    width: 200px;
-    height: 600px;
+.sidebar{
+    
     display: flex;
     flex-direction: column;
-    position: relative;
-    padding: 10px;
-    border-radius: 10px;
+    justify-content: space-between;
+    align-items: center;
+    width: 200px;
+    
 }
 
-.sidebar .head{
+.sidebar .head {
     display: flex;
-    gap: 20px;
-    padding-bottom: 0%;
-    border-bottom: 1px solid #f6f6f6;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 3px solid green;
+    border-right: 3px solid green;
+    width: 200px;
+    height: 100px;
 }
 
 .user-img{
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     overflow: hidden;
-}
-.user-details {
-    position: relative;
-    flex: 1;
-    flex-direction: column;
-    bottom: 0;
-    left: 0;
 }
 
 .user-img img{
@@ -78,9 +75,17 @@ div .container {
     object-fit: cover;
 }
 
+.user-details{
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-end;
+   height: 70px;
+   width: auto;
+   bottom: 0%;
+}
+
 .user-details .name{
-    font-size: 10px;
-    
+    font-size: 20px;
     font-weight: 500;
     color: black;
 }
@@ -91,32 +96,74 @@ div .container {
 }
 
 .log-out {
-    margin-top: auto;
-    margin-right: auto;
-    margin-left: 10px;
-    margin-bottom: 10px;
+    display: flex;
+    height: 40px;
+    text-align: center;
 }
-
 
 .logout-button {
-    padding: 10px 10px;
-    background-color: #ff0000;
-    color: #ffffff; 
-    text-decoration: none;
-    border: none;
-    border-radius: 2px;
+   
+    background-color: #13aa52;
+    border: 1px solid #13aa52;
+    border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
+    box-sizing: border-box;
+    color: #fff;
     cursor: pointer;
+    font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    outline: none;
+    outline: 0;
+    padding: 10px 25px;
+    text-align: center;
+    transform: translateY(0);
+    transition: transform 150ms, box-shadow 150ms;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
 }
-
+    
 .logout-button:hover {
-    background-color: #cc0000;
+    box-shadow: rgba(0, 0, 0, .15) 0 3px 9px 0;
+    transform: translateY(-2px);
+}
+    
+@media (min-width: 768px) {
+    .logout-button {
+        padding: 10px 30px;
+    }
 }
 
-.container-column-two {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto; 
-    padding: 20px;
-    position: relative;
-     
+
+.content{
+    width: 1094px;
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    display: flex;
+    height: 20px;
+}
+
+.playlists{
+    display: flex;
+    height: 781px;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: flex-start;
+    
+}
+
+.item{
+    display: flex;
+    flex-direction: column;
+    height: 150px;
+}
+
+
+.p-image.resize{
+    width:100px; 
+    height: auto;
 }
