@@ -70,8 +70,12 @@ def profile():
     """
     check_state()
     name, followers, p_pic = spotify.current_user_profile(session['auth_header'])
-
-    return render_template('index.html', name=name, followers=followers, p_pic=p_pic)
+    playlists = spotify.current_user_playlists(session['auth_header'])
+    return render_template('index.html',
+                           name=name,
+                           followers=followers,
+                           p_pic=p_pic,
+                           playlists=playlists["items"])
     
 
     
@@ -86,9 +90,8 @@ def logout():
 def check_state():
     state = spotify.check_expired(session['expires_at'])
     if state is True:
-        auth_header, refresh_token, expires_at = spotify.get_refresh_token(session['refresh_token'])
+        auth_header, expires_at = spotify.get_refresh_token(session['refresh_token'])
         session['auth_header'] = auth_header
-        session['refresh_token'] = refresh_token
         session['expires_at'] = expires_at
 
 
