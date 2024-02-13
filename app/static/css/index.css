@@ -1,66 +1,52 @@
 body {
     font-family: Helvetica, sans-serif;
-    width: 100%; /* Full width */
+    width: 100%;
     height: 100vh;
-    margin: 0; /* Remove default margin */
-    padding: 0; /* Add padding to body */
+    margin: 0; 
+    padding: 0; 
     box-sizing: border-box; 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     position: relative;
+    
+    background-image: radial-gradient(circle at top right, rgb(49, 157, 235) 0%, rgb(49, 157, 235) 13%,rgb(76, 166, 234) 13%, rgb(76, 166, 234) 23%,rgb(103, 176, 232) 23%, rgb(103, 176, 232) 33%,rgb(130, 185, 231) 33%, rgb(130, 185, 231) 46%,rgb(156, 194, 230) 46%, rgb(156, 194, 230) 48%,rgb(183, 203, 229) 48%, rgb(183, 203, 229) 63%,rgb(210, 213, 227) 63%, rgb(210, 213, 227) 83%,rgb(237, 222, 226) 83%, rgb(237, 222, 226) 100%);
+
 }
 
 .container {
     display: flex;
-    position: relative;
     justify-content: flex-start;
+    flex-grow: 1;
     top: 0;
     left: 0;
     width: 100%;
-    height: 70px;
+    height: 10%;
     align-items: center;
     margin-left: 0px;
     border-bottom: 3px solid green;
-}
-
-.container .brand-text{
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 10px 10px;
-    margin-left: 0px;
-    margin-bottom: 0;
-    height: 50px;
-    font-family: Helvetica, sans-serif;
-}
-
-.container-column {
-    display: flex;
-    flex-grow: 1;
-    justify-content: space-between;
-    height: 804px;
 }
 
 .sidebar{
     
     display: flex;
-    flex-direction: column;
+    flex-grow: 1;
     justify-content: space-between;
     align-items: center;
-    width: 200px;
+    width: 100%;
+    background-image: radial-gradient(circle at top center, rgba(17, 201, 137,0.15) 0%, rgba(17, 201, 137,0.15) 6%,transparent 6%, transparent 54%,transparent 54%, transparent 93%,rgba(48, 184, 210,0.15) 93%, rgba(48, 184, 210,0.15) 100%),radial-gradient(circle at top right, rgba(17, 201, 137,0.15) 0%, rgba(17, 201, 137,0.15) 2%,transparent 2%, transparent 19%,transparent 19%, transparent 36%,rgba(48, 184, 210,0.15) 36%, rgba(48, 184, 210,0.15) 100%),radial-gradient(circle at top right, rgba(17, 201, 137,0.15) 0%, rgba(17, 201, 137,0.15) 1%,transparent 1%, transparent 2%,transparent 2%, transparent 11%,rgba(48, 184, 210,0.15) 11%, rgba(48, 184, 210,0.15) 100%),radial-gradient(circle at center center, rgba(17, 201, 137,0.15) 0%, rgba(17, 201, 137,0.15) 13%,transparent 13%, transparent 59%,transparent 59%, transparent 67%,rgba(48, 184, 210,0.15) 67%, rgba(48, 184, 210,0.15) 100%),linear-gradient(90deg, hsl(38,64%,92%),hsl(38,64%,92%)); background-size: 111px 111px;
     
 }
 
-.sidebar .head {
+.head {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     align-items: center;
     gap: 10px;
-    border-bottom: 3px solid green;
-    border-right: 3px solid green;
-    width: 200px;
+    flex-wrap: wrap;
+    width: 15vw;
     height: 100px;
+    margin-left: 10px;
 }
 
 .user-img{
@@ -85,6 +71,7 @@ body {
 }
 
 .user-details .name{
+    font-family: "Pacifico", sans-serif;
     font-size: 20px;
     font-weight: 500;
     color: black;
@@ -92,13 +79,16 @@ body {
 
 .user-details .followers{
     font-size: 10px;
-    font-weight: 100;
+    font-weight: 500;
 }
 
 .log-out {
     display: flex;
     height: 40px;
     text-align: center;
+    justify-content: center;
+    margin-right: 10px;
+    
 }
 
 .logout-button {
@@ -136,15 +126,26 @@ body {
 }
 
 
-.content{
-    width: 1094px;
+.container-column {
     display: flex;
     flex-direction: column;
+    gap: 10px;
+    height: auto;
+    flex-grow: 1;
+    justify-content: flex-start;
+    overflow: auto;
+    gap: 5px;
+    background-image: radial-gradient(circle at top right, rgb(49, 157, 235) 0%, rgb(49, 157, 235) 13%,rgb(76, 166, 234) 13%, rgb(76, 166, 234) 23%,rgb(103, 176, 232) 23%, rgb(103, 176, 232) 33%,rgb(130, 185, 231) 33%, rgb(130, 185, 231) 46%,rgb(156, 194, 230) 46%, rgb(156, 194, 230) 48%,rgb(183, 203, 229) 48%, rgb(183, 203, 229) 63%,rgb(210, 213, 227) 63%, rgb(210, 213, 227) 83%,rgb(237, 222, 226) 83%, rgb(237, 222, 226) 100%);
 }
+
+
+
 
 .title {
     display: flex;
-    height: 20px;
+    
+
+
 }
 
 .playlists{
@@ -153,6 +154,8 @@ body {
     flex-wrap: wrap;
     align-content: flex-start;
     justify-content: flex-start;
+    gap: 10px;
+    overflow: auto;
     
 }
 
@@ -160,10 +163,20 @@ body {
     display: flex;
     flex-direction: column;
     height: 150px;
+    gap: 3px;
+    align-items: center;
+    justify-content: center;
+    
+
 }
 
-
-.p-image.resize{
-    width:100px; 
-    height: auto;
+.item .name{
+    font-size: 10px;
 }
+
+@media (max-width: 600px) {
+    .container-column {
+        width:100%;
+    }
+}
+

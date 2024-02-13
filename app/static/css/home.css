@@ -26,8 +26,8 @@ header {
 
 .brand-text {
     font-family: "Pacifico", sans-serif;
-    font-size: 2em;
-    color: greenyellow;
+    font-size: 4em;
+    color: rgb(227, 141, 50);
     user-select: none;
 }
 
@@ -75,7 +75,7 @@ header {
     border-radius: 6px;
     cursor: pointer;
     font-size: 1em;
-    color: greenyellow;
+    color: rgb(227, 141, 50);
     font-weight: 500;
     font-family: "Pacifico", sans-serif;
 }
