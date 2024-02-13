@@ -76,6 +76,20 @@ def profile():
                            followers=followers,
                            p_pic=p_pic,
                            playlists=playlists["items"])
+
+@app.route("/featured_playlists", strict_slashes=False)
+def featured_playlists():
+    check_state()
+    response = spotify.get_featured_playlists(session['auth_header'])
+    dic = {}
+    playlists = response.get("playlists", {}).get("items", [])  # Access playlists within 'playlists' key
+    for playlist in playlists:
+        name = playlist.get("name")
+        if name:
+            dic[name] = name
+    return jsonify(dic)
+
+    
     
 
     

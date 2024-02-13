@@ -115,7 +115,7 @@ def current_user_profile(auth_header):
     return name, followers, p_pic
 
 def current_user_playlists(auth_header):
-    url = "https://api.spotify.com/v1/me/playlists?limit=12"
+    url = "https://api.spotify.com/v1/me/playlists?limit=50"
 
     
     response = requests.get(url, headers=auth_header)
@@ -133,3 +133,8 @@ def currently_playing(auth_header):
     
     return name, song, artist
 
+def get_featured_playlists(auth_header):
+    url = "https://api.spotify.com/v1/browse/featured-playlists?limit=50"
+    response = requests.get(url, headers=auth_header)
+    return response.json()
+    
