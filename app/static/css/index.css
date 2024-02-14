@@ -131,6 +131,7 @@ body {
     flex-direction: column;
     gap: 10px;
     height: auto;
+    
     flex-grow: 1;
     justify-content: flex-start;
     overflow: auto;

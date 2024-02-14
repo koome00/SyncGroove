@@ -117,9 +117,12 @@ def current_user_profile(auth_header):
     return name, followers, p_pic, user_id
 
 def current_user_playlists(auth_header):
-    url = "https://api.spotify.com/v1/me/playlists?limit=50"
+    url = "https://api.spotify.com/v1/me/playlists?offset=0&limit=50"
     response = requests.get(url, headers=auth_header)
+
     return response.json()
+    
+        
 
 def currently_playing(auth_header):
     url = "https://api.spotify.com/v1/me/player/currently-playing"
@@ -136,61 +139,62 @@ def get_featured_playlists(auth_header):
     response = requests.get(url, headers=auth_header)
     return response.json()
     
-def create_new_playlist(auth_header, user_id):
-    url = f"https://api.spotify.com/v1/users/{user_id}/playlists"
-    auth_header.update({'Content-Type': 'application/json'})
-    data = {'name': "Saved Discover Weekly",
-            'description': 'Saved discover weekly songs',
-            'public': False, 
-            'collaborative': True}
-
-    discover_weekly_id = ""
-    saved_discover_weekly_id = ""
-    
+def save_discover_weekly_playlist(auth_header):   
     # get current playlists
     playlists = current_user_playlists(auth_header)
     
+    
     # iterate through the playlists items to find Discover Weekly id
     # and to see if Saved Discover Weekly is present to get its id
+    discover_weekly_id = ""
+    saved_discover_weekly_id = ""
     for item in playlists['items']:
         if item['name'] == "Discover Weekly":
             discover_weekly_id = item['id']
-    for item in playlists['items']:   
-        if item['name'] == "Saved discover weekly songs":
+            
+        if item['name'] == "SyncGroove":
+            print("water")
             saved_discover_weekly_id = item['id']
+    
+    
 
     # if saved discover weekly is not present, it is created
-    if saved_discover_weekly_id == "":
-        response = requests.post(url, headers=auth_header, json=data)
-        print("Response content:", response.text)
-        r = response.json()
-        saved_discover_weekly_id = r['id']
+    
     
     # discover weekly tracks uri are saved into a list
     r = get_playlist_items(auth_header, discover_weekly_id)
-    songs_list =[]
+    songs_to_add = []
     for item in r['items']:
         for key in item.keys():
             if key == 'track':
-                print(item[key]["uri"])
-                songs_list.append(item[key]["uri"])
+                songs_to_add.append(item[key]["uri"])
+                
 
-    # duplicate songs are removed from the list
-    unique_list = list(set(songs_list))
+    # check for duplicate songs 
+    r_2 = get_playlist_items(auth_header, saved_discover_weekly_id)
+    songs_added = []
+    for item in r_2['items']:
+        for key in item.keys():
+            if key == 'track':
+                songs_added.append(item[key]["uri"])
+    unique = []
+
+    # removes duplicate songs
+    for song in songs_to_add:
+        if song not in songs_added:
+            unique.append(song)
     uris = {}
-    uris["uris"] = unique_list
-
+    uris["uris"] = unique
+    
     # Saved discover weekly is updated with the songs
     update_playlist_items(auth_header, saved_discover_weekly_id, uris)
 
-    r = get_playlist_items(auth_header, saved_discover_weekly_id)
-
-    
-    return r['items']
+    r_3 = get_playlist_items(auth_header, saved_discover_weekly_id)
+    return r_3['items']
 
 def get_playlist_items(auth_header, playlist_id):
 
-    url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit=30"
+    url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit=50"
     response = requests.get(url, headers=auth_header)
     return response.json()
 
@@ -198,9 +202,6 @@ def update_playlist_items(auth_header, playlist_id, uris):
     url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
     auth_header.update({'Content-Type': 'application/json'})
     requests.post(url, headers=auth_header, json=uris)
-
-
-
 
 
 
