@@ -119,7 +119,6 @@ def current_user_profile(auth_header):
 def current_user_playlists(auth_header):
     url = "https://api.spotify.com/v1/me/playlists?offset=0&limit=50"
     response = requests.get(url, headers=auth_header)
-
     return response.json()
     
         
@@ -148,17 +147,15 @@ def save_discover_weekly_playlist(auth_header):
     # and to see if Saved Discover Weekly is present to get its id
     discover_weekly_id = ""
     saved_discover_weekly_id = ""
+    url = ""
     for item in playlists['items']:
         if item['name'] == "Discover Weekly":
             discover_weekly_id = item['id']
             
         if item['name'] == "SyncGroove":
-            print("water")
+            url = item["external_urls"]["spotify"]
             saved_discover_weekly_id = item['id']
     
-    
-
-    # if saved discover weekly is not present, it is created
     
     
     # discover weekly tracks uri are saved into a list
@@ -190,7 +187,7 @@ def save_discover_weekly_playlist(auth_header):
     update_playlist_items(auth_header, saved_discover_weekly_id, uris)
 
     r_3 = get_playlist_items(auth_header, saved_discover_weekly_id)
-    return r_3['items']
+    return r_3['items'], url
 
 def get_playlist_items(auth_header, playlist_id):
 
@@ -203,5 +200,9 @@ def update_playlist_items(auth_header, playlist_id, uris):
     auth_header.update({'Content-Type': 'application/json'})
     requests.post(url, headers=auth_header, json=uris)
 
+def get_users_top_artists(auth_header):
+    url = "https://api.spotify.com/v1/me/top/artists?limit=15"
+    response = requests.get(url, headers=auth_header)
+    return response.json()
 
 
