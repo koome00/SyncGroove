@@ -75,12 +75,59 @@ body {
     font-size: 20px;
     font-weight: 500;
     color: black;
+    margin-bottom: 0px;
 }
 
 .user-details .followers{
     font-size: 10px;
     font-weight: 500;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
+
+.save-playlist {
+    display: flex;
+    height: 40px;
+    text-align: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+
+.save-button {
+    background-color: green;
+    border: 1px solid green;
+    border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    outline: none;
+    outline: 0;
+    padding: 10px 25px;
+    text-align: center;
+    transform: translateY(0);
+    transition: transform 150ms, box-shadow 150ms;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+    
+.save-button:hover {
+    box-shadow: rgba(0, 0, 0, .15) 0 3px 9px 0;
+    transform: translateY(-2px);
+}
+    
+@media (min-width: 768px) {
+    .save-button {
+        padding: 10px 30px;
+    }
+}
+
+
+
 
 .log-out {
     display: flex;
@@ -93,8 +140,8 @@ body {
 
 .logout-button {
    
-    background-color: #13aa52;
-    border: 1px solid #13aa52;
+    background-color: red;
+    border: 1px solid red;
     border-radius: 4px;
     box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
     box-sizing: border-box;
@@ -128,12 +175,12 @@ body {
 
 .container-column {
     display: flex;
-    flex-direction: column;
+    
     gap: 10px;
     height: auto;
     
     flex-grow: 1;
-    justify-content: flex-start;
+    justify-content: space-evenly;
     overflow: auto;
     gap: 5px;
     background-image: radial-gradient(circle at top right, rgb(49, 157, 235) 0%, rgb(49, 157, 235) 13%,rgb(76, 166, 234) 13%, rgb(76, 166, 234) 23%,rgb(103, 176, 232) 23%, rgb(103, 176, 232) 33%,rgb(130, 185, 231) 33%, rgb(130, 185, 231) 46%,rgb(156, 194, 230) 46%, rgb(156, 194, 230) 48%,rgb(183, 203, 229) 48%, rgb(183, 203, 229) 63%,rgb(210, 213, 227) 63%, rgb(210, 213, 227) 83%,rgb(237, 222, 226) 83%, rgb(237, 222, 226) 100%);
@@ -141,12 +188,13 @@ body {
 
 
 
-
+.column-one {
+    display: flex;
+    flex-direction: column;
+}
 .title {
     display: flex;
     
-
-
 }
 
 .playlists{
@@ -181,3 +229,97 @@ body {
     }
 }
 
+
+.column-two{
+    display: flex;
+    flex-direction: column;
+}
+.top {
+    display: flex;
+    
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: flex-start;
+    gap: 10px;
+    overflow: auto;
+    
+}
+footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    font-family: "Open Sans";
+    margin-top: auto;
+    padding-top: 0px;
+    color: black;
+}
+.footer-content h3{
+    font-family: "Pacifico", sans-serif;
+    font-size: 1em;
+    color: black;
+    user-select: none;
+    font-weight: 400;
+    text-transform: capitalize;
+    line-height: 2rem;
+}
+
+.footer-content {
+    display:  flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 0px 0;
+    opacity: 0.7;
+}
+
+
+.footer-content p{
+    max-width: 500px;
+    margin: 10px auto;
+    line-height: 28px;
+    font-size: 14px;
+}
+
+.socials {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0rem 0 0rem 0;
+}
+
+.socials li {
+    margin: 0px 40px;
+}
+
+@media screen and (max-width: 768px) {
+    .socials li {
+        margin: 0 20px; /* Widened margin for smaller screens */
+    }
+}
+
+
+.footer-bottom {
+    
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.footer-bottom p{
+    font-size: 10px;
+    word-spacing: 2px;
+    text-transform: capitalize;
+    
+}
+
+.footer-bottom span{
+    text-transform: uppercase;
+    opacity: .4;
+    font-weight: 200;
+}
