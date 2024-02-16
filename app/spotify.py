@@ -138,7 +138,7 @@ def get_featured_playlists(auth_header):
     response = requests.get(url, headers=auth_header)
     return response.json()
     
-def save_discover_weekly_playlist(auth_header):   
+def save_discover_weekly_playlist(auth_header):
     # get current playlists
     playlists = current_user_playlists(auth_header)
     

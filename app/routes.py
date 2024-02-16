@@ -20,7 +20,7 @@ def home():
     """
     route handling the login page
     """
-    return render_template('home.html')
+    return render_template('login.html')
 
 
 @app.route("/login", strict_slashes=False)
@@ -76,7 +76,7 @@ def profile():
     session['p_pic'] = p_pic
     playlists = spotify.current_user_playlists(session['auth_header'])
     top = spotify.get_users_top_artists(session['auth_header'])
-    return render_template('index.html',
+    return render_template('profile.html',
                            name=name,
                            followers=followers,
                            p_pic=p_pic,
@@ -93,10 +93,7 @@ def featured_playlists():
 def test():
     top = spotify.get_users_top_artists(session['auth_header'])
     return top
-    
-    
-
-    
+     
 
 @app.route("/logout")
 def logout():
