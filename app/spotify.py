@@ -138,7 +138,7 @@ def get_featured_playlists(auth_header):
     response = requests.get(url, headers=auth_header)
     return response.json()
     
-def save_discover_weekly_playlist(auth_header):
+def save_discover_weekly_playlist(auth_header, user_id):
     # get current playlists
     playlists = current_user_playlists(auth_header)
     
@@ -151,10 +151,23 @@ def save_discover_weekly_playlist(auth_header):
     for item in playlists['items']:
         if item['name'] == "Discover Weekly":
             discover_weekly_id = item['id']
-            
+    for item in playlists['items']:       
         if item['name'] == "SyncGroove":
             url = item["external_urls"]["spotify"]
             saved_discover_weekly_id = item['id']
+    print(saved_discover_weekly_id)
+    
+    if len(saved_discover_weekly_id) == 0:
+        urls = f"https://api.spotify.com/v1/users/{user_id}/playlists"
+        body = {'name': "SyncGroove"}
+        response = requests.post(urls, headers=auth_header, json=body)
+        print(response.status_code)
+        res = response.json()
+        print(res['id'])
+        saved_discover_weekly_id = res['id']
+        url = res["external_urls"]["spotify"]
+        
+    print(saved_discover_weekly_id)
     
     
     
@@ -169,6 +182,7 @@ def save_discover_weekly_playlist(auth_header):
 
     # check for duplicate songs 
     r_2 = get_playlist_items(auth_header, saved_discover_weekly_id)
+    print(r_2)
     songs_added = []
     for item in r_2['items']:
         for key in item.keys():
@@ -187,7 +201,7 @@ def save_discover_weekly_playlist(auth_header):
     update_playlist_items(auth_header, saved_discover_weekly_id, uris)
 
     r_3 = get_playlist_items(auth_header, saved_discover_weekly_id)
-    return r_3['items'], url
+    return  url
 
 def get_playlist_items(auth_header, playlist_id):
 

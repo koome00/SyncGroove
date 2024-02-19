@@ -69,8 +69,8 @@ def profile():
     user's profile page
     """
     check_state()
-    name, followers, p_pic, user_uri = spotify.current_user_profile(session['auth_header'])
-    session['user_uri'] = user_uri
+    name, followers, p_pic, user_id = spotify.current_user_profile(session['auth_header'])
+    session['user_id'] = user_id
     session['name'] = name
     session['followers'] = followers
     session['p_pic'] = p_pic
@@ -86,7 +86,7 @@ def profile():
 @app.route("/featured_playlists", strict_slashes=False)
 def featured_playlists():
     check_state()
-    url = spotify.save_discover_weekly_playlist(session['auth_header'])
+    url = spotify.save_discover_weekly_playlist(session['auth_header'], session['user_id'])
     return  redirect(url)
 
 @app.route("/test", strict_slashes=False)
