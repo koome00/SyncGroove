@@ -5,13 +5,13 @@ import base64
 import time
 import json
 
-# Allow loading environment variables from .env file
+# Allow loading environment variables from .env file to get
+# client_id and client_secret
 load_dotenv()
-
-
 c_id = os.getenv('CLIENT_ID')
 c_secret = os.getenv("CLIENT_SECRET")
 r_uri = 'http://localhost:5000/home/'
+
 
 def user_authorization():
     """
@@ -31,6 +31,7 @@ def user_authorization():
     authorization_url = f"{OAUTH_AUTHORIZE_URL}?{q}"    
 
     return authorization_url
+
 
 def request_access_token(authorization_code):
     """
@@ -73,7 +74,11 @@ def request_access_token(authorization_code):
 
 
 def get_refresh_token(refresh_token):
-    
+    """
+    this function is meant to get a refresh token if the current access token has expired
+    the new access token is added to the auth_header and a new expires at is calculated 
+    auth_header and expires_ar are returned
+    """
     auth = c_id + ":" + c_secret
     auth_string = auth.encode('utf-8')
     auth64 = str(base64.b64encode(auth_string), 'utf-8')
@@ -97,7 +102,12 @@ def get_refresh_token(refresh_token):
     auth_header = {"Authorization": "Bearer {}".format(access_token)}
     return auth_header, expires_at
 
+
 def check_expired(expired_at):
+    """
+    This function checks whether token has expired or not
+    The function then returns True or False
+    """
     now = int(time.time())
     if expired_at - now <= 0:
         return True
@@ -105,7 +115,9 @@ def check_expired(expired_at):
 
 
 def current_user_profile(auth_header):
-
+    """
+    GET request to get the current user's profile
+    """
     url = "https://api.spotify.com/v1/me"
 
     response = requests.get(url, headers=auth_header)
@@ -116,14 +128,21 @@ def current_user_profile(auth_header):
     user_id = r['id']
     return name, followers, p_pic, user_id
 
+
 def current_user_playlists(auth_header):
+    """
+    GET request to get the current user's saved playlists
+    """
     url = "https://api.spotify.com/v1/me/playlists?offset=0&limit=50"
     response = requests.get(url, headers=auth_header)
     return response.json()
-    
-        
+
 
 def currently_playing(auth_header):
+    """
+    GET request to get the currently playing song in the user's profile
+    Returns: name of device playing, song and artist
+    """
     url = "https://api.spotify.com/v1/me/player/currently-playing"
     response = requests.get(url, headers=auth_header)
     r = response.json()
@@ -133,12 +152,40 @@ def currently_playing(auth_header):
     
     return name, song, artist
 
+
 def get_featured_playlists(auth_header):
+    """
+    GET requests to get Spority featured playlists
+    """
     url = "https://api.spotify.com/v1/browse/featured-playlists?limit=50"
     response = requests.get(url, headers=auth_header)
     return response.json()
-    
+
+
+def get_playlist_items(auth_header, playlist_id):
+    """
+    GET request to get the items in a playlists
+    """
+    url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit=50"
+    response = requests.get(url, headers=auth_header)
+    return response.json()
+
+
+def update_playlist_items(auth_header, playlist_id, uris):
+    """
+    UPDATE request to add songs to a playlists
+    """
+    url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
+    auth_header.update({'Content-Type': 'application/json'})
+    requests.post(url, headers=auth_header, json=uris)   
+
+
 def save_discover_weekly_playlist(auth_header, user_id):
+    """
+    Function handles checking whether SyncGroove playlists exists if not it is created
+    Songs in the Discover Weekly Playlists are then added to the playlists after checking
+    for duplicates
+    """
     # get current playlists
     playlists = current_user_playlists(auth_header)
     
@@ -168,9 +215,6 @@ def save_discover_weekly_playlist(auth_header, user_id):
         url = res["external_urls"]["spotify"]
         
     print(saved_discover_weekly_id)
-    
-    
-    
     # discover weekly tracks uri are saved into a list
     r = get_playlist_items(auth_header, discover_weekly_id)
     songs_to_add = []
@@ -178,8 +222,7 @@ def save_discover_weekly_playlist(auth_header, user_id):
         for key in item.keys():
             if key == 'track':
                 songs_to_add.append(item[key]["uri"])
-                
-
+            
     # check for duplicate songs 
     r_2 = get_playlist_items(auth_header, saved_discover_weekly_id)
     print(r_2)
@@ -203,18 +246,11 @@ def save_discover_weekly_playlist(auth_header, user_id):
     r_3 = get_playlist_items(auth_header, saved_discover_weekly_id)
     return  url
 
-def get_playlist_items(auth_header, playlist_id):
-
-    url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit=50"
-    response = requests.get(url, headers=auth_header)
-    return response.json()
-
-def update_playlist_items(auth_header, playlist_id, uris):
-    url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
-    auth_header.update({'Content-Type': 'application/json'})
-    requests.post(url, headers=auth_header, json=uris)
 
 def get_users_top_artists(auth_header):
+    """
+    GET request to get the users top artists in the last six months
+    """
     url = "https://api.spotify.com/v1/me/top/artists?limit=15"
     response = requests.get(url, headers=auth_header)
     return response.json()

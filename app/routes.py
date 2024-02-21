@@ -1,3 +1,8 @@
+"""
+Routes Module
+Handles the routing of the application
+"""
+
 from flask import Flask, request, redirect, jsonify, render_template, session, url_for
 from flask_cors import CORS
 import spotify
@@ -14,7 +19,7 @@ app.permanent_session_lifetime = timedelta(days=1)
 c_id = os.getenv('CLIENT_ID')
 c_secret = os.getenv("CLIENT_SECRET")
 
-  
+
 @app.route("/", strict_slashes=False)
 def home():
     """
@@ -66,7 +71,7 @@ def authorized():
 @app.route("/profile", strict_slashes=False)
 def profile():
     """
-    user's profile page
+    route to user's profile page
     """
     check_state()
     name, followers, p_pic, user_id = spotify.current_user_profile(session['auth_header'])
@@ -83,26 +88,35 @@ def profile():
                            playlists=playlists["items"],
                            top=top["items"])
 
+
 @app.route("/featured_playlists", strict_slashes=False)
 def featured_playlists():
+    """
+    When the user clicks the save discover weekly button,
+    they are redirected to the spotify link of the playlist.
+    This link has been extracted from the response to get that playlist
+    """
     check_state()
     url = spotify.save_discover_weekly_playlist(session['auth_header'], session['user_id'])
-    return  redirect(url)
+    return  redirect(url)    
 
-@app.route("/test", strict_slashes=False)
-def test():
-    top = spotify.get_users_top_artists(session['auth_header'])
-    return top
-     
 
 @app.route("/logout")
 def logout():
+    """
+    handles logging out by clearing the session
+    """
     user_name = request.args.get("user")
     session.clear()
     return redirect(url_for("home"))
 
 
 def check_state():
+    """
+    checks the state of access_token expiry
+    if expired, refresh token is requested and the information
+    stored in the session
+    """
     state = spotify.check_expired(session['expires_at'])
     if state is True:
         auth_header, expires_at = spotify.get_refresh_token(session['refresh_token'])

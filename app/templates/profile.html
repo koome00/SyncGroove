@@ -26,7 +26,7 @@
         </div>
         
         <div class="save-playlist">
-          <a href="{{ url_for('featured_playlists') }}" class="save-button">Save Discover Daily</a>
+          <a href="{{ url_for('featured_playlists') }}" class="save-button">Save Discover Weekly</a>
         </div>
         <div class="log-out">
           <a href="{{ url_for('logout') }}" class="logout-button">Log Out</a>
@@ -56,7 +56,7 @@
       </div>
       <div class="column-2">
         <div class="title">
-          <h3 class="display"> Your Top Items</h3>
+          <h3 class="display"> Your Top Artists</h3>
         </div>
         <div class="top">
           {% for items in top %}
