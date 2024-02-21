@@ -6,10 +6,9 @@ Handles the routing of the application
 from flask import Flask, request, redirect, jsonify, render_template, session, url_for
 from flask_cors import CORS
 import spotify
-import os, time, requests, base64
-from datetime import timedelta, datetime, timezone
+import os
+from datetime import timedelta
 from dotenv import load_dotenv
-import json
 
 load_dotenv()
 app = Flask(__name__)

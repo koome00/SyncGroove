@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import requests
 import base64
 import time
-import json
+
 
 # Allow loading environment variables from .env file to get
 # client_id and client_secret
@@ -181,11 +181,7 @@ def update_playlist_items(auth_header, playlist_id, uris):
 
 
 def save_discover_weekly_playlist(auth_header, user_id):
-    """
-    Function handles checking whether SyncGroove playlists exists if not it is created
-    Songs in the Discover Weekly Playlists are then added to the playlists after checking
-    for duplicates
-    """
+   
     # get current playlists
     playlists = current_user_playlists(auth_header)
     
