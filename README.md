@@ -16,7 +16,7 @@ One playlist in particular called Discover Weekly provides users with a curation
 
 Here is a [YouTube link](https://youtu.be/HIrxhJYBMRY) showing how the app works.
 Here is the yet to be integrated landing page [SyncGroove](https://koomemc.wixsite.com/syncgroove-1)
-[Blog Post]()
+[Blog Post](https://medium.com/@koomemc/syncgroove-2f0ed6db3e99)
 
 ## Instalation
 * Must have Spotify Premium account
