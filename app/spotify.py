@@ -181,7 +181,10 @@ def update_playlist_items(auth_header, playlist_id, uris):
 
 
 def save_discover_weekly_playlist(auth_header, user_id):
-   
+    """
+    Checks whether SyncGroove is present or not, if absent, 
+    it is created and unique songs added to it
+    """
     # get current playlists
     playlists = current_user_playlists(auth_header)
     
